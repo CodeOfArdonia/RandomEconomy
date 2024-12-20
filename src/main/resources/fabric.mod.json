@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "not_enough_economy",
+	"version": "${version}",
+	"name": "Not Enough Economy",
+	"description": "A economy system.",
+	"authors": [
+		"IAFEnvoy"
+	],
+	"contact": {
+		"sources": "https://github.com/CodeOfArdonia/NotEnoughEconomy"
+	},
+	"license": "All Right Reserved",
+	"icon": "assets/not_enough_economy/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.iafenvoy.nee.NotEnoughEconomy"
+		]
+	},
+	"mixins": [
+		"not_enough_economy.mixins.json"
+	],
+	"depends": {
+		"minecraft": "1.20.1",
+		"fabric-api": "*"
+	}
+}

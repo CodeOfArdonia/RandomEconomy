@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "not_enough_economy:item/iron_coin"
+  }
+}

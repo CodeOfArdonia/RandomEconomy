@@ -1,0 +1,16 @@
+{
+  "block.not_enough_economy.cheque_table": "Cheque Table",
+  "block.not_enough_economy.exchange_station": "Exchange Station",
+  "item.not_enough_economy.cheque": "Cheque",
+  "item.not_enough_economy.copper_coin": "Copper Coin",
+  "item.not_enough_economy.diamond_coin": "Diamond Coin",
+  "item.not_enough_economy.emerald_coin": "Emerald Coin",
+  "item.not_enough_economy.gold_coin": "Gold Coin",
+  "item.not_enough_economy.iron_coin": "Iron Coin",
+  "item.not_enough_economy.netherite_coin": "Netherite Coin",
+  "item.not_enough_economy.owner": "Owner: %s",
+  "item.not_enough_economy.value": "Value: %s",
+  "itemGroup.not_enough_economy.main": "Not Enough Economy",
+  "screen.not_enough_economy.cheque_table": "Cheque Table",
+  "screen.not_enough_economy.exchange_station": "Exchange Station"
+}

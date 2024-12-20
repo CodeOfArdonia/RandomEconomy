@@ -1,0 +1,10 @@
+{
+  "checked": {
+    "sounds": [
+      {
+        "name": "not_enough_economy:checked",
+        "stream": false
+      }
+    ]
+  }
+}
