@@ -42,8 +42,8 @@ public class ChequeItem extends Item {
 
     public static ItemStack create(int value, String owner) {
         ItemStack stack = new ItemStack(NeeItems.CHEQUE);
-        stack.getOrCreateNbt().putInt(VALUE_KEY, value);
-        stack.getOrCreateNbt().putString(OWNER_KEY, owner);
+        if (value > 0) stack.getOrCreateNbt().putInt(VALUE_KEY, value);
+        if (owner != null) stack.getOrCreateNbt().putString(OWNER_KEY, owner);
         return stack;
     }
 }

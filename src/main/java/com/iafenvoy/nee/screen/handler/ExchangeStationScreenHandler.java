@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 public class ExchangeStationScreenHandler extends ScreenHandler {
     private final Inventory inputInv, outputInv;
     private final ScreenHandlerContext context;
-    private final Slot input, leftOutput, rightOutput;
     @Nullable
     private ExchangeHolder currentHolder = null;
 
@@ -32,17 +31,17 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
         this.inputInv = new InventoryWithCallback(1, this);
         this.outputInv = new SimpleInventory(2);
         this.context = context;
-        this.input = this.addSlot(new MoneyOnlySlot(this.inputInv, 0, 80, 20));
-        this.leftOutput = this.addSlot(new TakeOnlySlot(this, this.outputInv, 0, 22, 20, amount -> {
+        this.addSlot(new MoneyOnlySlot(this.inputInv, 0, 80, 20));
+        this.addSlot(new TakeOnlySlot(this, this.outputInv, 0, 22, 20, amount -> {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.leftRatio();
-            this.input.getStack().decrement(amount / ratio);
+            this.inputInv.getStack(0).decrement(amount / ratio);
             NeeHandlerUtils.playCheckedSound(this.context);
         }));
-        this.rightOutput = this.addSlot(new TakeOnlySlot(this, this.outputInv, 1, 138, 20, amount -> {
+        this.addSlot(new TakeOnlySlot(this, this.outputInv, 1, 138, 20, amount -> {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.rightRatio();
-            this.input.getStack().decrement(amount * ratio);
+            this.inputInv.getStack(0).decrement(amount * ratio);
             NeeHandlerUtils.playCheckedSound(this.context);
         }));
         for (int i = 0; i < 3; ++i)
@@ -54,10 +53,10 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
 
     @Override
     public void onContentChanged(Inventory inventory) {
-        ItemStack in = this.input.getStack();
+        ItemStack in = this.inputInv.getStack(0);
         this.currentHolder = ExchangeHolder.get(in.getItem());
-        this.leftOutput.setStackNoCallbacks(this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseLeft(in));
-        this.rightOutput.setStackNoCallbacks(this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseRight(in));
+        this.outputInv.setStack(0, this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseLeft(in));
+        this.outputInv.setStack(1, this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseRight(in));
         super.onContentChanged(inventory);
     }
 
@@ -89,6 +88,6 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
     @Override
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
-        player.giveItemStack(this.inputInv.getStack(0));
+        this.dropInventory(player, this.inputInv);
     }
 }
