@@ -11,6 +11,7 @@ public final class NotEnoughEconomy implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        NeeBlockEntities.init();
         NeeBlocks.init();
         NeeItemGroups.init();
         NeeItems.init();

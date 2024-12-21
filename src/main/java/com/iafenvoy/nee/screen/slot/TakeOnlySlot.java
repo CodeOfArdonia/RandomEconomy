@@ -1,4 +1,4 @@
-package com.iafenvoy.nee.screen.inventory;
+package com.iafenvoy.nee.screen.slot;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;

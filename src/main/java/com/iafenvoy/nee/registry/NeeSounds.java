@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 
 public class NeeSounds {
     public static final SoundEvent CHECKED = register("checked");
+    public static final SoundEvent COINS = register("coins");
 
     public static SoundEvent register(String id) {
         Identifier i = Identifier.of(NotEnoughEconomy.MOD_ID, id);

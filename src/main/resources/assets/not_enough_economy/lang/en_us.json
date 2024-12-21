@@ -12,5 +12,6 @@
   "item.not_enough_economy.value": "Value: %s",
   "itemGroup.not_enough_economy.main": "Not Enough Economy",
   "screen.not_enough_economy.cheque_table": "Cheque Table",
-  "screen.not_enough_economy.exchange_station": "Exchange Station"
+  "screen.not_enough_economy.exchange_station": "Exchange Station",
+  "screen.not_enough_economy.trade_station": "Trade Station"
 }

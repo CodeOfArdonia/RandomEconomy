@@ -1,4 +1,4 @@
-package com.iafenvoy.nee.screen.inventory;
+package com.iafenvoy.nee.screen.slot;
 
 import com.iafenvoy.nee.util.ThingWithPrice;
 import net.minecraft.inventory.Inventory;

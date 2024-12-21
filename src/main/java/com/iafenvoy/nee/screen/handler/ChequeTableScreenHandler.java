@@ -6,9 +6,9 @@ import com.iafenvoy.nee.item.CoinItem;
 import com.iafenvoy.nee.registry.NeeBlocks;
 import com.iafenvoy.nee.registry.NeeItems;
 import com.iafenvoy.nee.registry.NeeScreenHandlers;
-import com.iafenvoy.nee.screen.inventory.ChequeOnlySlot;
-import com.iafenvoy.nee.screen.inventory.MoneyOnlySlot;
-import com.iafenvoy.nee.screen.inventory.TakeOnlySlot;
+import com.iafenvoy.nee.screen.slot.ChequeOnlySlot;
+import com.iafenvoy.nee.screen.slot.MoneyOnlySlot;
+import com.iafenvoy.nee.screen.slot.TakeOnlySlot;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,7 +22,7 @@ import net.minecraft.screen.slot.Slot;
 import java.util.List;
 
 public class ChequeTableScreenHandler extends ScreenHandler {
-    private final Inventory coinInv, chequeInputInv, chequeOutputInv;
+    private final Inventory coins, chequesInput, chequesOutput;
     private final ScreenHandlerContext context;
 
     public ChequeTableScreenHandler(int syncId, PlayerInventory playerInventory) {
@@ -31,15 +31,15 @@ public class ChequeTableScreenHandler extends ScreenHandler {
 
     public ChequeTableScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(NeeScreenHandlers.CHEQUE_TABLE, syncId);
-        this.coinInv = new SimpleInventory(15);
-        this.chequeInputInv = new SimpleInventory(1);
-        this.chequeOutputInv = new SimpleInventory(1);
+        this.coins = new SimpleInventory(15);
+        this.chequesInput = new SimpleInventory(1);
+        this.chequesOutput = new SimpleInventory(1);
         this.context = context;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 5; ++j)
-                this.addSlot(new MoneyOnlySlot(this.coinInv, j + i * 5, 8 + j * 18, 18 + i * 18));
-        this.addSlot(new ChequeOnlySlot(this.chequeInputInv, 0, 134, 18));
-        this.addSlot(new TakeOnlySlot(this, this.chequeOutputInv, 0, 134, 54, amount -> {
+                this.addSlot(new MoneyOnlySlot(this.coins, j + i * 5, 8 + j * 18, 18 + i * 18));
+        this.addSlot(new ChequeOnlySlot(this.chequesInput, 0, 134, 18));
+        this.addSlot(new TakeOnlySlot(this, this.chequesOutput, 0, 134, 54, amount -> {
         }));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
@@ -55,11 +55,11 @@ public class ChequeTableScreenHandler extends ScreenHandler {
         if (slot2.hasStack()) {
             ItemStack itemStack2 = slot2.getStack();
             itemStack = itemStack2.copy();
-            if (slot < this.coinInv.size() + this.chequeInputInv.size() + this.chequeOutputInv.size()) {
-                if (!this.insertItem(itemStack2, this.coinInv.size() + this.chequeInputInv.size() + this.chequeOutputInv.size(), this.slots.size(), true))
+            if (slot < this.coins.size() + 2) {
+                if (!this.insertItem(itemStack2, this.coins.size() + 2, this.slots.size(), true))
                     return ItemStack.EMPTY;
                 slot2.onTakeItem(player, itemStack);
-            } else if (!this.insertItem(itemStack2, 0, this.coinInv.size() + this.chequeInputInv.size(), false))
+            } else if (!this.insertItem(itemStack2, 0, this.coins.size() + 1, false))
                 return ItemStack.EMPTY;
             if (itemStack2.isEmpty()) slot2.setStack(ItemStack.EMPTY);
             else slot2.markDirty();
@@ -75,25 +75,25 @@ public class ChequeTableScreenHandler extends ScreenHandler {
     @Override
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
-        this.dropInventory(player, this.coinInv);
-        this.dropInventory(player, this.chequeInputInv);
+        this.dropInventory(player, this.coins);
+        this.dropInventory(player, this.chequesInput);
     }
 
     public void checkIn(PlayerEntity player) {
-        ItemStack emptyCheque = this.chequeInputInv.getStack(0);
+        ItemStack emptyCheque = this.chequesInput.getStack(0);
         if (!emptyCheque.isOf(NeeItems.CHEQUE) || emptyCheque.getNbt() != null) return;
-        this.chequeOutputInv.setStack(0, ChequeItem.create(CoinItem.calculateValue(this.coinInv), player.getGameProfile().getName()));
+        this.chequesOutput.setStack(0, ChequeItem.create(CoinItem.calculateValue(this.coins), player.getGameProfile().getName()));
         emptyCheque.decrement(1);
-        this.coinInv.clear();
+        this.coins.clear();
         NeeHandlerUtils.playCheckedSound(this.context);
     }
 
     public void checkOut(PlayerEntity player) {
-        ItemStack cheque = this.chequeInputInv.getStack(0);
+        ItemStack cheque = this.chequesInput.getStack(0);
         if (!cheque.isOf(NeeItems.CHEQUE) || cheque.getNbt() == null) return;
         int value = ChequeItem.getValue(cheque);
-        for (int i = 0; i < this.coinInv.size(); i++) {
-            ItemStack stack = this.coinInv.getStack(i);
+        for (int i = 0; i < this.coins.size(); i++) {
+            ItemStack stack = this.coins.getStack(i);
             while (stack.getItem() instanceof CoinItem coinItem && value >= coinItem.getValue() && stack.getCount() < stack.getMaxCount()) {
                 stack.increment(1);
                 value -= coinItem.getValue();
@@ -101,9 +101,9 @@ public class ChequeTableScreenHandler extends ScreenHandler {
         }
         int j = 0;
         List<ItemStack> remains = CoinItem.calculateCoins(value);
-        for (int i = 0; i < this.coinInv.size() && j < remains.size(); i++)
-            if (this.coinInv.getStack(i).isEmpty()) {
-                this.coinInv.setStack(i, remains.get(j));
+        for (int i = 0; i < this.coins.size() && j < remains.size(); i++)
+            if (this.coins.getStack(i).isEmpty()) {
+                this.coins.setStack(i, remains.get(j));
                 j++;
             }
         for (; j < remains.size(); j++) player.getInventory().offerOrDrop(remains.get(j));
