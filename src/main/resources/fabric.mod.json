@@ -16,6 +16,17 @@
 	"entrypoints": {
 		"main": [
 			"com.iafenvoy.nee.NotEnoughEconomy"
+		],
+		"client": [
+			"com.iafenvoy.nee.NotEnoughEconomyClient"
+		],
+		"cardinal-components": [
+			"com.iafenvoy.nee.component.ModComponentEntry"
+		]
+	},
+	"custom": {
+		"cardinal-components": [
+			"not_enough_economy:trade_station"
 		]
 	},
 	"mixins": [

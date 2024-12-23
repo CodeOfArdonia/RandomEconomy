@@ -6,7 +6,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -31,6 +33,14 @@ public class TradeStationBlock extends BlockWithEntity {
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (world.getBlockEntity(pos) instanceof TradeStationBlockEntity blockEntity && placer instanceof PlayerEntity player)
+            blockEntity.setOwner(player.getUuid());
+
     }
 
     @Override

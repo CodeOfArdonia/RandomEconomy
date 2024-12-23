@@ -11,6 +11,21 @@ public interface ImplementedInventory extends Inventory {
         return () -> items;
     }
 
+    static ImplementedInventory of(DefaultedList<ItemStack> items, Runnable onDirty) {
+        return new ImplementedInventory() {
+            @Override
+            public DefaultedList<ItemStack> getItems() {
+                return items;
+            }
+
+            @Override
+            public void markDirty() {
+                ImplementedInventory.super.markDirty();
+                onDirty.run();
+            }
+        };
+    }
+
     static ImplementedInventory ofSize(int size) {
         return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
     }

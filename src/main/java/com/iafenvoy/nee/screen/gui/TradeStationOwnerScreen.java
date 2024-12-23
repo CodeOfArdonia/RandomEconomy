@@ -2,8 +2,10 @@ package com.iafenvoy.nee.screen.gui;
 
 import com.iafenvoy.nee.NotEnoughEconomy;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;

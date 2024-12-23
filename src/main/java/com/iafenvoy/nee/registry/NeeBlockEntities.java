@@ -8,7 +8,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-public class NeeBlockEntities {
+public final class NeeBlockEntities {
     public static final BlockEntityType<TradeStationBlockEntity> TRADE_STATION = register("trade_station", BlockEntityType.Builder.create(TradeStationBlockEntity::new, NeeBlocks.TRADE_STATION).build(null));
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String id, BlockEntityType<T> type) {
