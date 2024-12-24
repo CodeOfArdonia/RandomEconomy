@@ -2,7 +2,6 @@ package com.iafenvoy.nee.item.block;
 
 import com.iafenvoy.nee.NotEnoughEconomy;
 import com.iafenvoy.nee.screen.handler.ExchangeStationScreenHandler;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class ExchangeStationBlock extends Block {
+public class ExchangeStationBlock extends WorkStationBlock {
     public ExchangeStationBlock() {
         super(Settings.copy(Blocks.CRAFTING_TABLE));
     }

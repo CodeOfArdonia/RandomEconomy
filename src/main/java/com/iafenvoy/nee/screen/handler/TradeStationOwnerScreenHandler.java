@@ -1,9 +1,9 @@
 package com.iafenvoy.nee.screen.handler;
 
+import com.iafenvoy.nee.item.block.entity.TradeStationBlockEntity;
 import com.iafenvoy.nee.registry.NeeBlocks;
 import com.iafenvoy.nee.registry.NeeScreenHandlers;
-import com.iafenvoy.nee.screen.slot.DisplayOnlySlot;
-import com.iafenvoy.nee.screen.slot.MoneyOnlySlot;
+import com.iafenvoy.nee.screen.slot.FakeItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+
+import java.util.Objects;
 
 public class TradeStationOwnerScreenHandler extends ScreenHandler {
     private final Inventory left, right, inventory;
@@ -34,11 +36,11 @@ public class TradeStationOwnerScreenHandler extends ScreenHandler {
 
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new DisplayOnlySlot(this.left, j + i * 4, 8 + j * 18, 16 + i * 18));
+                this.addSlot(new FakeItemSlot(this.left, j + i * 4, 8 + j * 18, 16 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new DisplayOnlySlot(this.right, j + i * 4, 98 + j * 18, 16 + i * 18));
-        this.addSlot(new DisplayOnlySlot(display, 0, 152, 72));
+                this.addSlot(new FakeItemSlot(this.right, j + i * 4, 98 + j * 18, 16 + i * 18));
+        this.addSlot(new FakeItemSlot(display, 0, 152, 72));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 7; ++j)
                 this.addSlot(new Slot(this.inventory, j + i * 7, 8 + j * 18, 72 + i * 18));

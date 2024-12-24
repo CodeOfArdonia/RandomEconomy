@@ -5,18 +5,20 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
-public class DisplayOnlySlot extends Slot {
-    public DisplayOnlySlot(Inventory inventory, int index, int x, int y) {
+public class FakeItemSlot extends Slot {
+    public FakeItemSlot(Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
     }
 
     @Override
     public boolean canTakeItems(PlayerEntity playerEntity) {
+        this.setStack(ItemStack.EMPTY);
         return false;
     }
 
     @Override
-    public boolean canInsert(ItemStack stack) {
-        return false;
+    public ItemStack insertStack(ItemStack stack, int count) {
+        this.setStack(stack.copy());
+        return stack;
     }
 }

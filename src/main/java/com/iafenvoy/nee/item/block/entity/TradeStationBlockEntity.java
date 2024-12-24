@@ -2,11 +2,10 @@ package com.iafenvoy.nee.item.block.entity;
 
 import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
+import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -74,6 +74,7 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
     public void readFromNbt(NbtCompound nbt) {
         if (nbt.contains(OWNER_KEY, NbtElement.INT_ARRAY_TYPE)) this.owner = nbt.getUuid(OWNER_KEY);
         if (nbt.contains(OWNER_NAME_KEY, NbtElement.STRING_TYPE)) this.ownerNameCache = nbt.getString(OWNER_NAME_KEY);
+        this.display.clear();
         Inventories.readNbt(nbt.getCompound("display"), this.display);
     }
 
@@ -105,7 +106,14 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
 
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new TradeStationOwnerScreenHandler(syncId, playerInventory,
+        ScreenHandlerContext ctx = new ScreenHandlerContext() {
+            @Override
+            public <T> Optional<T> get(BiFunction<World, BlockPos, T> getter) {
+                return Optional.of(getter.apply(TradeStationBlockEntity.this.world, TradeStationBlockEntity.this.pos));
+            }
+        };
+        if (Objects.equals(this.getOwner(), player.getUuid())) return new TradeStationOwnerScreenHandler(syncId,
+                playerInventory,
                 ImplementedInventory.of(this.left, this::markDirty),
                 ImplementedInventory.of(this.right, this::markDirty),
                 ImplementedInventory.of(this.inventory, this::markDirty),
@@ -113,12 +121,11 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
                     this.markDirty();
                     TradeStationComponent.COMPONENT.sync(this);
                 }),
-                new ScreenHandlerContext() {
-                    @Override
-                    public <T> Optional<T> get(BiFunction<World, BlockPos, T> getter) {
-                        return Optional.of(getter.apply(TradeStationBlockEntity.this.world, TradeStationBlockEntity.this.pos));
-                    }
-                });
+                ctx);
+        else return new TradeStationCustomerScreenHandler(syncId, playerInventory,
+                ImplementedInventory.of(this.left),
+                ImplementedInventory.of(this.right),
+                ctx);
     }
 
     public ItemStack getDisplayStack() {

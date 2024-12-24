@@ -1,6 +1,8 @@
 {
   "block.not_enough_economy.cheque_table": "Cheque Table",
   "block.not_enough_economy.exchange_station": "Exchange Station",
+  "block.not_enough_economy.system_station": "System Station",
+  "block.not_enough_economy.trade_station": "Trade Station",
   "item.not_enough_economy.cheque": "Cheque",
   "item.not_enough_economy.copper_coin": "Copper Coin",
   "item.not_enough_economy.diamond_coin": "Diamond Coin",
@@ -14,6 +16,6 @@
   "screen.not_enough_economy.cheque_table": "Cheque Table",
   "screen.not_enough_economy.exchange_station": "Exchange Station",
   "screen.not_enough_economy.trade_station": "%s's Trade Station",
-  "screen.not_enough_economy.trade_station_float": "§6%s§f's Trade Station",
-  "screen.not_enough_economy.trade_station_empty": "Unknown Trade Station"
+  "screen.not_enough_economy.trade_station_empty": "Unknown Trade Station",
+  "screen.not_enough_economy.trade_station_float": "§6%s§f's Trade Station"
 }

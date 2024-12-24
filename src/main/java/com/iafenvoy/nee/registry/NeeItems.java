@@ -19,7 +19,6 @@ public final class NeeItems {
     public static final CoinItem DIAMOND_COIN = register("diamond_coin", new CoinItem(1000));
     public static final CoinItem EMERALD_COIN = register("emerald_coin", new CoinItem(10000));
     public static final CoinItem NETHERITE_COIN = register("netherite_coin", new CoinItem(100000));
-    public static final List<CoinItem> COINS = List.of(COPPER_COIN, IRON_COIN, GOLD_COIN, DIAMOND_COIN, EMERALD_COIN, NETHERITE_COIN);
 
     public static final ChequeItem CHEQUE = register("cheque", new ChequeItem());
 

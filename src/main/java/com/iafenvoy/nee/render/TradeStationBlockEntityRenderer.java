@@ -30,6 +30,7 @@ public class TradeStationBlockEntityRenderer implements BlockEntityRenderer<Trad
 
     @Override
     public void render(TradeStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        if (entity.getDisplayStack().isEmpty()) return;
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
         this.renderItem(entity, tickDelta, matrices, vertexConsumers, overlay);

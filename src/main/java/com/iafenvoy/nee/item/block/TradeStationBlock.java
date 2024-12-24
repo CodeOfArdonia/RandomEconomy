@@ -1,9 +1,8 @@
 package com.iafenvoy.nee.item.block;
 
 import com.iafenvoy.nee.item.block.entity.TradeStationBlockEntity;
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TradeStationBlock extends BlockWithEntity {
+public class TradeStationBlock extends WorkStationBlock implements BlockEntityProvider {
     public TradeStationBlock() {
         super(Settings.copy(Blocks.CRAFTING_TABLE));
     }
@@ -40,11 +39,5 @@ public class TradeStationBlock extends BlockWithEntity {
         super.onPlaced(world, pos, state, placer, itemStack);
         if (world.getBlockEntity(pos) instanceof TradeStationBlockEntity blockEntity && placer instanceof PlayerEntity player)
             blockEntity.setOwner(player.getUuid());
-
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
     }
 }

@@ -2,7 +2,6 @@ package com.iafenvoy.nee.item.block;
 
 import com.iafenvoy.nee.NotEnoughEconomy;
 import com.iafenvoy.nee.screen.handler.ChequeTableScreenHandler;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class ChequeTableBlock extends Block {
+public class ChequeTableBlock extends WorkStationBlock {
     public ChequeTableBlock() {
         super(Settings.copy(Blocks.CRAFTING_TABLE));
     }

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "not_enough_economy:cheque_table",
+    "not_enough_economy:exchange_station",
+    "not_enough_economy:trade_station"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "not_enough_economy:block/system_station"
+    }
+  }
+}
