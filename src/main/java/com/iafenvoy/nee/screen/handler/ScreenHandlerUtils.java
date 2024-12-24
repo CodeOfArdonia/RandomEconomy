@@ -8,6 +8,7 @@ public class ScreenHandlerUtils {
     public static void playCheckedSound(ScreenHandlerContext context) {
         context.run((world, pos) -> world.playSound(null, pos, NeeSounds.CHECKED, SoundCategory.BLOCKS));
     }
+
     public static void playCoinsSound(ScreenHandlerContext context) {
         context.run((world, pos) -> world.playSound(null, pos, NeeSounds.COINS, SoundCategory.BLOCKS));
     }

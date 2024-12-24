@@ -5,6 +5,7 @@ import com.iafenvoy.nee.registry.NeeBlockEntities;
 import com.iafenvoy.nee.screen.handler.SystemStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.SystemStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
+import com.iafenvoy.nee.util.SyncBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
-public class SystemStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class SystemStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SyncBlockEntity {
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "owner_name";
     @Nullable
@@ -35,7 +36,6 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
     private String ownerNameCache;
     private final DefaultedList<ItemStack> left = DefaultedList.ofSize(12, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> right = DefaultedList.ofSize(12, ItemStack.EMPTY);
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> display = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
     public SystemStationBlockEntity(BlockPos pos, BlockState state) {
@@ -48,7 +48,6 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
         this.readFromNbt(nbt);
         Inventories.readNbt(nbt.getCompound("left"), this.left);
         Inventories.readNbt(nbt.getCompound("right"), this.right);
-        Inventories.readNbt(nbt.getCompound("inventory"), this.inventory);
     }
 
     @Override
@@ -57,7 +56,6 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
         this.writeToNbt(nbt);
         nbt.put("left", Inventories.writeNbt(new NbtCompound(), this.left));
         nbt.put("right", Inventories.writeNbt(new NbtCompound(), this.right));
-        nbt.put("inventory", Inventories.writeNbt(new NbtCompound(), this.inventory));
     }
 
     public void writeToNbt(NbtCompound nbt) {
@@ -90,7 +88,10 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
             return new SystemStationOwnerScreenHandler(syncId,
                     playerInventory,
                     ImplementedInventory.of(this.left, this::markDirty),
-                    ImplementedInventory.of(this.right, this::markDirty),
+                    ImplementedInventory.of(this.right, () -> {
+                        this.markDirty();
+                        TradeStationComponent.COMPONENT.sync(this);
+                    }),
                     ImplementedInventory.of(this.display, () -> {
                         this.markDirty();
                         TradeStationComponent.COMPONENT.sync(this);

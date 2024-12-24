@@ -1,7 +1,7 @@
 package com.iafenvoy.nee.component;
 
 import com.iafenvoy.nee.NotEnoughEconomy;
-import com.iafenvoy.nee.item.block.entity.TradeStationBlockEntity;
+import com.iafenvoy.nee.util.SyncBlockEntity;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.component.ComponentV3;
@@ -11,9 +11,9 @@ import net.minecraft.util.Identifier;
 
 public class TradeStationComponent implements ComponentV3, AutoSyncedComponent {
     public static final ComponentKey<TradeStationComponent> COMPONENT = ComponentRegistry.getOrCreate(Identifier.of(NotEnoughEconomy.MOD_ID, "trade_station"), TradeStationComponent.class);
-    private final TradeStationBlockEntity blockEntity;
+    private final SyncBlockEntity blockEntity;
 
-    public TradeStationComponent(TradeStationBlockEntity blockEntity) {
+    public TradeStationComponent(SyncBlockEntity blockEntity) {
         this.blockEntity = blockEntity;
     }
 

@@ -2,21 +2,22 @@ package com.iafenvoy.nee.item.block.entity;
 
 import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
+import com.iafenvoy.nee.registry.NeeBlocks;
 import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
+import com.iafenvoy.nee.util.SyncBlockEntity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -31,7 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
-public class TradeStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class TradeStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SyncBlockEntity {
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "owner_name";
     @Nullable
@@ -137,5 +138,25 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
     public String getOwnerName() {
         if (this.getOwner() == null) return this.ownerNameCache;
         return Optional.ofNullable(this.getWorld()).map(x -> x.getPlayerByUuid(this.getOwner())).map(PlayerEntity::getGameProfile).map(GameProfile::getName).orElse(this.ownerNameCache);
+    }
+
+    public void dropInventory() {
+        assert this.world != null;
+        for (ItemStack stack : this.inventory) {
+            ItemEntity itemEntity = new ItemEntity(this.world, (double) this.pos.getX() + 0.5, (double) this.pos.getY() + 0.5, (double) this.pos.getZ() + 0.5, stack);
+            itemEntity.setToDefaultPickupDelay();
+            this.world.spawnEntity(itemEntity);
+        }
+    }
+
+    public void dropFullBlock() {
+        assert this.world != null;
+        ItemStack stack = new ItemStack(NeeBlocks.TRADE_STATION);
+        NbtCompound compound = new NbtCompound();
+        this.writeNbt(compound);
+        BlockItem.setBlockEntityNbt(stack, NeeBlockEntities.TRADE_STATION, compound);
+        ItemEntity itemEntity = new ItemEntity(this.world, (double) this.pos.getX() + 0.5, (double) this.pos.getY() + 0.5, (double) this.pos.getZ() + 0.5, stack);
+        itemEntity.setToDefaultPickupDelay();
+        this.world.spawnEntity(itemEntity);
     }
 }

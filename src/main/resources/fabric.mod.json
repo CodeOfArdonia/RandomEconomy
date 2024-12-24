@@ -3,15 +3,16 @@
 	"id": "not_enough_economy",
 	"version": "${version}",
 	"name": "Not Enough Economy",
-	"description": "A economy system.",
+	"description": "An item based economy system.",
 	"authors": [
-		"IAFEnvoy"
+		"IAFEnvoy",
+		"HF_ColdWind"
 	],
 	"contact": {
 		"sources": "https://github.com/CodeOfArdonia/NotEnoughEconomy"
 	},
 	"license": "All Right Reserved",
-	"icon": "assets/not_enough_economy/icon.png",
+	"icon": "logo.jpg",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

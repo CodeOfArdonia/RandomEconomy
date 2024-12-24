@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SystemStationBlock extends WorkStationBlock implements BlockEntityProvider {
     public SystemStationBlock() {
-        super(Settings.copy(Blocks.CRAFTING_TABLE));
+        super(Settings.copy(Blocks.CRAFTING_TABLE).strength(-1.0F, 3600000.0F).dropsNothing());
     }
 
     @Override
