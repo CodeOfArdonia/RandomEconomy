@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"4": "not_enough_economy:block/system_station_1",
-		"5": "not_enough_economy:block/system_station_2"
+		"5": "not_enough_economy:block/system_station_2",
+		"particle": "not_enough_economy:block/system_station_2"
 	},
 	"elements": [
 		{

@@ -12,7 +12,7 @@ public class InventoryUtil {
         target = copy(target);
         Map<ItemStack, Integer> itemsMap = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
-            ItemStack stack = items.getStack(i);
+            ItemStack stack = items.getStack(i).copy();
             itemsMap.put(stack, itemsMap.getOrDefault(stack, 0) + stack.getCount());
         }
         for (int i = 0; i < target.size(); i++) {
@@ -20,8 +20,12 @@ public class InventoryUtil {
             for (Map.Entry<ItemStack, Integer> entry : itemsMap.entrySet()) {
                 ItemStack stack = entry.getKey();
                 int neededCount = entry.getValue();
-                if (ItemStack.canCombine(stack, targetStack) && targetStack.getCount() >= neededCount) {
-                    itemsMap.put(stack, 0);
+                if (ItemStack.canCombine(stack, targetStack)) {
+                    int count = targetStack.getCount();
+                    if (count >= neededCount)
+                        itemsMap.put(stack, 0);
+                    else
+                        itemsMap.put(stack, neededCount - count);
                     break;
                 }
             }
@@ -46,7 +50,7 @@ public class InventoryUtil {
                 if (ItemStack.canCombine(stack, targetStack)) {
                     int count = targetStack.getCount();
                     if (count >= neededCount) {
-                        targetStack.setCount(count - neededCount);
+                        targetStack.decrement(neededCount);
                         itemsMap.put(stack, 0);
                         break;
                     } else {
@@ -87,34 +91,34 @@ public class InventoryUtil {
         return availableSpace;
     }
 
-    public static boolean insertItems(Inventory inventory, Inventory insert) {
+    public static void insertItems(Inventory inventory, Inventory insert) {
         for (int i = 0; i < insert.size(); i++) {
             ItemStack insertStack = insert.getStack(i);
-            if (insertStack != null) {
-                ItemStack copy = insertStack.copy();
-                if (!tryAddItemToInventory(inventory, copy))
-                    return false;
-            }
+            if (insertStack != null)
+                tryAddItemToInventory(inventory, insertStack.copy());
         }
-        return true;
     }
 
-    private static boolean tryAddItemToInventory(Inventory inventory, ItemStack stack) {
-        if (stack.isEmpty()) return true;
+    private static void tryAddItemToInventory(Inventory inventory, ItemStack stack) {
+        if (stack.isEmpty()) return;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack inventoryStack = inventory.getStack(i);
             if (inventoryStack == null || ItemStack.canCombine(inventoryStack, stack)) {
                 if (stack.getMaxCount() - (inventoryStack != null ? inventoryStack.getCount() : 0) > 0) {
                     int countToAdd = Math.min(stack.getCount(), stack.getMaxCount() - (inventoryStack != null ? inventoryStack.getCount() : 0));
                     if (inventoryStack == null) inventory.setStack(i, stack.copy());
-                    else inventoryStack.setCount(inventoryStack.getCount() + countToAdd);
-                    stack.setCount(stack.getCount() - countToAdd);
+                    else inventoryStack.increment(countToAdd);
+                    stack.decrement(countToAdd);
                     if (stack.getCount() == 0)
-                        return true;
+                        return;
                 }
             }
         }
-        return false;
+        for (int i = 0; i < inventory.size(); i++)
+            if (inventory.getStack(i).isEmpty()) {
+                inventory.setStack(i, stack);
+                break;
+            }
     }
 
     public static Inventory copy(Inventory another) {
