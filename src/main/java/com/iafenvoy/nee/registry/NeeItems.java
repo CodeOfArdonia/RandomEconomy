@@ -10,8 +10,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public final class NeeItems {
     public static final CoinItem COPPER_COIN = register("copper_coin", new CoinItem(1));
     public static final CoinItem IRON_COIN = register("iron_coin", new CoinItem(10));

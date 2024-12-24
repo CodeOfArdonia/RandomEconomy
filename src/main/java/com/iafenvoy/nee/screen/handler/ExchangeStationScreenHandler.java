@@ -36,13 +36,13 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.leftRatio();
             this.inputs.getStack(0).decrement(amount / ratio);
-            NeeHandlerUtils.playCoinsSound(this.context);
+            ScreenHandlerUtils.playCoinsSound(this.context);
         }));
         this.addSlot(new TakeOnlySlot(this, this.outputs, 1, 138, 20, amount -> {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.rightRatio();
             this.inputs.getStack(0).decrement(amount * ratio);
-            NeeHandlerUtils.playCoinsSound(this.context);
+            ScreenHandlerUtils.playCoinsSound(this.context);
         }));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)

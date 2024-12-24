@@ -1,7 +1,7 @@
 {
   "block.not_enough_economy.cheque_table": "Cheque Table",
   "block.not_enough_economy.exchange_station": "Exchange Station",
-  "block.not_enough_economy.system_station": "System Station",
+  "block.not_enough_economy.system_station": "System Trade Station",
   "block.not_enough_economy.trade_station": "Trade Station",
   "item.not_enough_economy.cheque": "Cheque",
   "item.not_enough_economy.copper_coin": "Copper Coin",
@@ -15,6 +15,10 @@
   "itemGroup.not_enough_economy.main": "Not Enough Economy",
   "screen.not_enough_economy.cheque_table": "Cheque Table",
   "screen.not_enough_economy.exchange_station": "Exchange Station",
+  "screen.not_enough_economy.failure.no_enough_goods": "This trade station has run out of goods!",
+  "screen.not_enough_economy.failure.no_enough_money": "You don't have enough items for trade!",
+  "screen.not_enough_economy.failure.no_enough_space": "This trade station is full!",
+  "screen.not_enough_economy.system_station": "System Trade Station",
   "screen.not_enough_economy.trade_station": "%s's Trade Station",
   "screen.not_enough_economy.trade_station_empty": "Unknown Trade Station",
   "screen.not_enough_economy.trade_station_float": "§6%s§f's Trade Station"

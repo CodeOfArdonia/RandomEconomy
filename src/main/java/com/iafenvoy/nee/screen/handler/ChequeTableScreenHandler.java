@@ -85,7 +85,7 @@ public class ChequeTableScreenHandler extends ScreenHandler {
         this.chequesOutput.setStack(0, ChequeItem.create(CoinItem.calculateValue(this.coins), player.getGameProfile().getName()));
         emptyCheque.decrement(1);
         this.coins.clear();
-        NeeHandlerUtils.playCheckedSound(this.context);
+        ScreenHandlerUtils.playCheckedSound(this.context);
     }
 
     public void checkOut(PlayerEntity player) {
@@ -108,7 +108,7 @@ public class ChequeTableScreenHandler extends ScreenHandler {
             }
         for (; j < remains.size(); j++) player.getInventory().offerOrDrop(remains.get(j));
         cheque.decrement(1);
-        NeeHandlerUtils.playCheckedSound(this.context);
+        ScreenHandlerUtils.playCheckedSound(this.context);
     }
 
     static {

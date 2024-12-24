@@ -2,7 +2,7 @@ package com.iafenvoy.nee.screen.gui;
 
 import com.iafenvoy.nee.Constants;
 import com.iafenvoy.nee.NotEnoughEconomy;
-import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
+import com.iafenvoy.nee.screen.handler.SystemStationCustomerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -15,10 +15,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class TradeStationCustomerScreen extends HandledScreen<TradeStationCustomerScreenHandler> {
+public class SystemStationCustomerScreen extends HandledScreen<SystemStationCustomerScreenHandler> {
     private static final Identifier TEXTURE = Identifier.of(NotEnoughEconomy.MOD_ID, "textures/gui/trade_station_customer.png");
 
-    public TradeStationCustomerScreen(TradeStationCustomerScreenHandler handler, PlayerInventory inventory, Text title) {
+    public SystemStationCustomerScreen(SystemStationCustomerScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundHeight++;
     }
@@ -29,8 +29,8 @@ public class TradeStationCustomerScreen extends HandledScreen<TradeStationCustom
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         this.addDrawableChild(ButtonWidget.builder(Text.literal("→"), button -> {
-            assert Constants.TRADE != null;
-            ClientPlayNetworking.send(Constants.TRADE, PacketByteBufs.create());
+            assert Constants.SYSTEM_TRADE != null;
+            ClientPlayNetworking.send(Constants.SYSTEM_TRADE, PacketByteBufs.create());
         }).position(i + 80, j + 36).size(16, 16).build());
     }
 

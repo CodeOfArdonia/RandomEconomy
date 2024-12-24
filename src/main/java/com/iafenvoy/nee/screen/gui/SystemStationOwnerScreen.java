@@ -1,37 +1,22 @@
 package com.iafenvoy.nee.screen.gui;
 
-import com.iafenvoy.nee.Constants;
 import com.iafenvoy.nee.NotEnoughEconomy;
-import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
+import com.iafenvoy.nee.screen.handler.SystemStationOwnerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class TradeStationCustomerScreen extends HandledScreen<TradeStationCustomerScreenHandler> {
+public class SystemStationOwnerScreen extends HandledScreen<SystemStationOwnerScreenHandler> {
     private static final Identifier TEXTURE = Identifier.of(NotEnoughEconomy.MOD_ID, "textures/gui/trade_station_customer.png");
 
-    public TradeStationCustomerScreen(TradeStationCustomerScreenHandler handler, PlayerInventory inventory, Text title) {
+    public SystemStationOwnerScreen(SystemStationOwnerScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundHeight++;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        int i = (this.width - this.backgroundWidth) / 2;
-        int j = (this.height - this.backgroundHeight) / 2;
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("→"), button -> {
-            assert Constants.TRADE != null;
-            ClientPlayNetworking.send(Constants.TRADE, PacketByteBufs.create());
-        }).position(i + 80, j + 36).size(16, 16).build());
     }
 
     @Override
