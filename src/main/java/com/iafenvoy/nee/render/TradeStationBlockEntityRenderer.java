@@ -13,6 +13,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -34,7 +35,9 @@ public class TradeStationBlockEntityRenderer implements BlockEntityRenderer<Trad
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
         this.renderItem(entity, tickDelta, matrices, vertexConsumers, overlay);
-        this.renderLabelIfPresent(entity, entity.getFloatingName(), matrices, vertexConsumers);
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.crosshairTarget instanceof BlockHitResult blockHitResult && client.world != null && client.world.getBlockEntity(blockHitResult.getBlockPos()) == entity)
+            this.renderLabelIfPresent(entity, entity.getFloatingName(), matrices, vertexConsumers);
         matrices.pop();
     }
 
