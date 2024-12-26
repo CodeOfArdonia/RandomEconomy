@@ -17,6 +17,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -141,7 +142,8 @@ public final class PlayerExchangeHolder {
                     single.accepted = false;
                     sendAcceptState(another.player, false);
                 };
-                case SELF_CLOSE_SCREEN -> (Runnable) () -> holder.onCancel(single.player.getDisplayName());
+                case SELF_CLOSE_SCREEN ->
+                        (Runnable) () -> holder.onCancel(single.player.getDisplayName().copyContentOnly().formatted(Formatting.RED));
                 default -> TradeMessageType.EMPTY;
             });
         });

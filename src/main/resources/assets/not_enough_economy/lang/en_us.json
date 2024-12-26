@@ -3,7 +3,7 @@
   "block.not_enough_economy.exchange_station": "Exchange Station",
   "block.not_enough_economy.system_station": "System Trade Station",
   "block.not_enough_economy.trade_station": "Trade Station",
-  "command.not_enough_economy.trade_cancel": "§c%s cancelled the trade!",
+  "command.not_enough_economy.trade_cancel": "%s §ccancelled the trade!",
   "command.not_enough_economy.trade_request": "%s send you a trade request! §6Click here to start trade.",
   "command.not_enough_economy.trade_request_sent": "Trade request sent.",
   "command.not_enough_economy.trade_success": "§aTrade success!",

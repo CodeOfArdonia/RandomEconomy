@@ -3,7 +3,7 @@
   "block.not_enough_economy.exchange_station": "换钱站",
   "block.not_enough_economy.system_station": "系统交易站",
   "block.not_enough_economy.trade_station": "交易站",
-  "command.not_enough_economy.trade_cancel": "§c%s取消了交易！",
+  "command.not_enough_economy.trade_cancel": "%s§c取消了交易！",
   "command.not_enough_economy.trade_request": "%s向你发送了一个交易请求！§6点击这里开始交易",
   "command.not_enough_economy.trade_request_sent": "交易请求已发送",
   "command.not_enough_economy.trade_success": "§a交易成功！",
