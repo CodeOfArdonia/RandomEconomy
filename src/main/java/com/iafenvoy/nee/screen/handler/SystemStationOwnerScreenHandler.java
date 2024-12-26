@@ -13,7 +13,6 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 
 public class SystemStationOwnerScreenHandler extends ScreenHandler {
-    private final Inventory left, right;
     private final ScreenHandlerContext context;
 
     public SystemStationOwnerScreenHandler(int syncId, PlayerInventory playerInventory) {
@@ -25,15 +24,13 @@ public class SystemStationOwnerScreenHandler extends ScreenHandler {
         checkSize(left, 12);
         checkSize(right, 12);
         checkSize(display, 1);
-        this.left = left;
-        this.right = right;
         this.context = context;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(this.left, j + i * 4, 8 + j * 18, 18 + i * 18));
+                this.addSlot(new FakeItemSlot(left, j + i * 4, 8 + j * 18, 18 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(this.right, j + i * 4, 98 + j * 18, 18 + i * 18));
+                this.addSlot(new FakeItemSlot(right, j + i * 4, 98 + j * 18, 18 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));

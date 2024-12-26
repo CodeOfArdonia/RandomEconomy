@@ -1,6 +1,7 @@
 package com.iafenvoy.nee.item.block;
 
 import com.iafenvoy.nee.NotEnoughEconomy;
+import com.iafenvoy.nee.screen.context.SimpleContext;
 import com.iafenvoy.nee.screen.handler.ExchangeStationScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -35,12 +36,7 @@ public class ExchangeStationBlock extends WorkStationBlock {
 
             @Override
             public @NotNull ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-                return new ExchangeStationScreenHandler(syncId, playerInventory, new ScreenHandlerContext() {
-                    @Override
-                    public <T> Optional<T> get(BiFunction<World, BlockPos, T> getter) {
-                        return Optional.of(getter.apply(world, pos));
-                    }
-                });
+                return new ExchangeStationScreenHandler(syncId, playerInventory, SimpleContext.of(world, pos));
             }
         });
         return ActionResult.SUCCESS;

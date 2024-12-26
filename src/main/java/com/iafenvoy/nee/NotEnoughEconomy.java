@@ -1,5 +1,6 @@
 package com.iafenvoy.nee;
 
+import com.iafenvoy.nee.command.TradeCommand;
 import com.iafenvoy.nee.registry.*;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
@@ -17,5 +18,7 @@ public final class NotEnoughEconomy implements ModInitializer {
         NeeItems.init();
         NeeScreenHandlers.init();
         NeeSounds.init();
+
+        TradeCommand.register();
     }
 }

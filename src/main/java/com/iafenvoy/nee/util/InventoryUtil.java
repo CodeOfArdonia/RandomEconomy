@@ -1,5 +1,6 @@
 package com.iafenvoy.nee.util;
 
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -114,7 +115,8 @@ public class InventoryUtil {
                 }
             }
         }
-        for (int i = 0; i < inventory.size(); i++)
+        if (inventory instanceof PlayerInventory playerInventory) playerInventory.offerOrDrop(stack);
+        else for (int i = 0; i < inventory.size(); i++)
             if (inventory.getStack(i).isEmpty()) {
                 inventory.setStack(i, stack);
                 break;

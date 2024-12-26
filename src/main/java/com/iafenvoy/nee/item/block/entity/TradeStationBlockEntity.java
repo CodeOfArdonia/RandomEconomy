@@ -3,6 +3,7 @@ package com.iafenvoy.nee.item.block.entity;
 import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
 import com.iafenvoy.nee.registry.NeeBlocks;
+import com.iafenvoy.nee.screen.context.SimpleContext;
 import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
@@ -24,13 +25,11 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 public class TradeStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SyncBlockEntity {
     private static final String OWNER_KEY = "owner";
@@ -107,12 +106,7 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
 
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        ScreenHandlerContext ctx = new ScreenHandlerContext() {
-            @Override
-            public <T> Optional<T> get(BiFunction<World, BlockPos, T> getter) {
-                return Optional.of(getter.apply(TradeStationBlockEntity.this.world, TradeStationBlockEntity.this.pos));
-            }
-        };
+        ScreenHandlerContext ctx = SimpleContext.of(this.world, this.pos);
         if (Objects.equals(this.getOwner(), player.getUuid())) return new TradeStationOwnerScreenHandler(syncId,
                 playerInventory,
                 ImplementedInventory.of(this.left, this::markDirty),

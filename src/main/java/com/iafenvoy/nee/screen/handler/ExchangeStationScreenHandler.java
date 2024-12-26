@@ -5,7 +5,7 @@ import com.iafenvoy.nee.registry.NeeScreenHandlers;
 import com.iafenvoy.nee.screen.inventory.InventoryWithCallback;
 import com.iafenvoy.nee.screen.slot.MoneyOnlySlot;
 import com.iafenvoy.nee.screen.slot.TakeOnlySlot;
-import com.iafenvoy.nee.util.ExchangeHolder;
+import com.iafenvoy.nee.trade.CoinExchangeHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -20,7 +20,7 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
     private final Inventory inputs, outputs;
     private final ScreenHandlerContext context;
     @Nullable
-    private ExchangeHolder currentHolder = null;
+    private CoinExchangeHolder currentHolder = null;
 
     public ExchangeStationScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
@@ -54,7 +54,7 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
     @Override
     public void onContentChanged(Inventory inventory) {
         ItemStack in = this.inputs.getStack(0);
-        this.currentHolder = ExchangeHolder.get(in.getItem());
+        this.currentHolder = CoinExchangeHolder.get(in.getItem());
         this.outputs.setStack(0, this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseLeft(in));
         this.outputs.setStack(1, this.currentHolder == null ? ItemStack.EMPTY : this.currentHolder.parseRight(in));
         super.onContentChanged(inventory);

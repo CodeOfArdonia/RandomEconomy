@@ -3,7 +3,7 @@ package com.iafenvoy.nee.registry;
 import com.iafenvoy.nee.NotEnoughEconomy;
 import com.iafenvoy.nee.item.ChequeItem;
 import com.iafenvoy.nee.item.CoinItem;
-import com.iafenvoy.nee.util.ExchangeHolder;
+import com.iafenvoy.nee.trade.CoinExchangeHolder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -26,11 +26,11 @@ public final class NeeItems {
     }
 
     public static void init() {
-        ExchangeHolder.register(COPPER_COIN, new ExchangeHolder(Items.AIR, 0, IRON_COIN, 10));
-        ExchangeHolder.register(IRON_COIN, new ExchangeHolder(COPPER_COIN, 10, GOLD_COIN, 10));
-        ExchangeHolder.register(GOLD_COIN, new ExchangeHolder(IRON_COIN, 10, DIAMOND_COIN, 10));
-        ExchangeHolder.register(DIAMOND_COIN, new ExchangeHolder(GOLD_COIN, 10, EMERALD_COIN, 10));
-        ExchangeHolder.register(EMERALD_COIN, new ExchangeHolder(DIAMOND_COIN, 10, NETHERITE_COIN, 10));
-        ExchangeHolder.register(NETHERITE_COIN, new ExchangeHolder(EMERALD_COIN, 10, Items.AIR, 0));
+        CoinExchangeHolder.register(COPPER_COIN, new CoinExchangeHolder(Items.AIR, 0, IRON_COIN, 10));
+        CoinExchangeHolder.register(IRON_COIN, new CoinExchangeHolder(COPPER_COIN, 10, GOLD_COIN, 10));
+        CoinExchangeHolder.register(GOLD_COIN, new CoinExchangeHolder(IRON_COIN, 10, DIAMOND_COIN, 10));
+        CoinExchangeHolder.register(DIAMOND_COIN, new CoinExchangeHolder(GOLD_COIN, 10, EMERALD_COIN, 10));
+        CoinExchangeHolder.register(EMERALD_COIN, new CoinExchangeHolder(DIAMOND_COIN, 10, NETHERITE_COIN, 10));
+        CoinExchangeHolder.register(NETHERITE_COIN, new CoinExchangeHolder(EMERALD_COIN, 10, Items.AIR, 0));
     }
 }

@@ -50,7 +50,7 @@ public class TradeStationBlockEntityRenderer implements BlockEntityRenderer<Trad
 
     private void renderLabelIfPresent(TradeStationBlockEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         double yOffset = 1.5f;
-        double d = this.dispatcher.camera.getPos().distanceTo(entity.getPos().toCenterPos().add(0, yOffset, 0));
+        double d = this.dispatcher.camera.getPos().squaredDistanceTo(entity.getPos().toCenterPos().add(0, yOffset, 0));
         if (d <= 4096.0) {
             matrices.push();
             matrices.translate(0, yOffset, 0);
