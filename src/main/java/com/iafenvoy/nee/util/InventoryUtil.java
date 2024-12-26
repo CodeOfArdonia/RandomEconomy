@@ -37,11 +37,11 @@ public class InventoryUtil {
         return true;
     }
 
-    public static void removeItems(Inventory target, Inventory items) {
+    public static boolean removeItems(Inventory target, Inventory items) {
         Map<ItemStack, Integer> itemsMap = new HashMap<>();
         for (int i = 0; i < items.size(); i++) {
             ItemStack stack = items.getStack(i);
-            itemsMap.put(stack, itemsMap.getOrDefault(stack, 0) + stack.getCount());
+            itemsMap.put(stack.copyWithCount(1), itemsMap.getOrDefault(stack, 0) + stack.getCount());
         }
         for (int i = 0; i < target.size(); i++) {
             ItemStack targetStack = target.getStack(i);
@@ -64,44 +64,26 @@ public class InventoryUtil {
 
         for (Map.Entry<ItemStack, Integer> entry : itemsMap.entrySet())
             if (entry.getValue() > 0)
-                throw new IllegalArgumentException("No enough items for removal");
+                return false;
+        return true;
     }
 
     public static boolean canFitItems(Inventory inventory, Inventory in, Inventory out) {
         inventory = copy(inventory);
-        removeItems(out, inventory);
-        return canFitAfterRemoval(inventory, in);
+        return removeItems(inventory, out) && insertItems(inventory, in);
     }
 
-    private static boolean canFitAfterRemoval(Inventory inventory, Inventory in) {
-        for (int i = 0; i < in.size(); i++) {
-            ItemStack inStack = in.getStack(i);
-            if (getAvailableSpaceForItem(inventory, inStack) < inStack.getCount())
+    public static boolean insertItems(Inventory inventory, Inventory insert) {
+        for (int i = 0; i < insert.size(); i++) {
+            ItemStack insertStack = insert.getStack(i);
+            if (insertStack != null && !tryAddItemToInventory(inventory, insertStack.copy()))
                 return false;
         }
         return true;
     }
 
-    private static int getAvailableSpaceForItem(Inventory inventory, ItemStack stack) {
-        int availableSpace = 0;
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack inventoryStack = inventory.getStack(i);
-            if (inventoryStack == null || ItemStack.canCombine(inventoryStack, stack))
-                availableSpace += stack.getMaxCount() - (inventoryStack != null ? inventoryStack.getCount() : 0);
-        }
-        return availableSpace;
-    }
-
-    public static void insertItems(Inventory inventory, Inventory insert) {
-        for (int i = 0; i < insert.size(); i++) {
-            ItemStack insertStack = insert.getStack(i);
-            if (insertStack != null)
-                tryAddItemToInventory(inventory, insertStack.copy());
-        }
-    }
-
-    private static void tryAddItemToInventory(Inventory inventory, ItemStack stack) {
-        if (stack.isEmpty()) return;
+    private static boolean tryAddItemToInventory(Inventory inventory, ItemStack stack) {
+        if (stack.isEmpty()) return true;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack inventoryStack = inventory.getStack(i);
             if (inventoryStack == null || ItemStack.canCombine(inventoryStack, stack)) {
@@ -111,16 +93,19 @@ public class InventoryUtil {
                     else inventoryStack.increment(countToAdd);
                     stack.decrement(countToAdd);
                     if (stack.getCount() == 0)
-                        return;
+                        return true;
                 }
             }
         }
-        if (inventory instanceof PlayerInventory playerInventory) playerInventory.offerOrDrop(stack);
-        else for (int i = 0; i < inventory.size(); i++)
+        if (inventory instanceof PlayerInventory playerInventory) {
+            playerInventory.offerOrDrop(stack);
+            return true;
+        } else for (int i = 0; i < inventory.size(); i++)
             if (inventory.getStack(i).isEmpty()) {
                 inventory.setStack(i, stack);
-                break;
+                return true;
             }
+        return false;
     }
 
     public static Inventory copy(Inventory another) {

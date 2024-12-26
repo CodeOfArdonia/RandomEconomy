@@ -42,6 +42,7 @@ public class TradeCommand {
                                 }
                                 REQUESTS.put(self, target);
                                 REQUEST_TIME.put(self, System.currentTimeMillis());
+                                self.sendMessage(Text.translatable("command.not_enough_economy.trade_request_sent"));
                                 target.sendMessage(Text.translatable("command.not_enough_economy.trade_request", self.getDisplayName()).fillStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/trade " + self.getGameProfile().getName()))));
                                 return 1;
                             })

@@ -37,7 +37,7 @@ public class TradeCommandScreen extends HandledScreen<TradeCommandScreenHandler>
             this.accepted ^= true;
             assert Constants.TRADE_STATE_CHANGE != null;
             ClientPlayNetworking.send(Constants.TRADE_STATE_CHANGE, PacketByteBufs.create().writeEnumConstant(this.accepted ? TradeMessageType.SELF_ACCEPT : TradeMessageType.SELF_CANCEL_ACCEPT));
-            this.self.setMessage(Text.translatable("screen.not_enough_economy.trade.button."+(this.accepted ? "accepted" : "accept")));
+            this.self.setMessage(Text.translatable("screen.not_enough_economy.trade.button." + (this.accepted ? "accepted" : "accept")));
         }).position(i + 7, j + 110).size(72, 16).build());
         this.another = this.addDrawableChild(ButtonWidget.builder(Text.translatable("screen.not_enough_economy.trade.button.waiting"), button -> {
         }).position(i + 97, j + 110).size(72, 16).build());

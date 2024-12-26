@@ -11,18 +11,19 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 public class TradeCommandScreenHandler extends ScreenHandler {
     private final Inventory left, right;
     private final ScreenHandlerContext context;
-    private final String anotherPlayerName;
+    private final Text anotherPlayerName;
 
     public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, new SimpleInventory(20), new SimpleInventory(20), ScreenHandlerContext.EMPTY, buf.readString());
+        this(syncId, playerInventory, new SimpleInventory(20), new SimpleInventory(20), ScreenHandlerContext.EMPTY, buf.readText());
     }
 
-    public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, Inventory left, Inventory right, ScreenHandlerContext context, String anotherPlayerName) {
+    public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, Inventory left, Inventory right, ScreenHandlerContext context, Text anotherPlayerName) {
         super(NeeScreenHandlers.TRADE_COMMAND, syncId);
         checkSize(left, 20);
         checkSize(right, 20);
@@ -44,13 +45,27 @@ public class TradeCommandScreenHandler extends ScreenHandler {
             this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 197));
     }
 
-    public @Nullable String getAnotherPlayerName() {
+    public @Nullable Text getAnotherPlayerName() {
         return this.anotherPlayerName;
     }
 
     @Override
     public ItemStack quickMove(PlayerEntity player, int slot) {
-        return null;
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot2 = this.slots.get(slot);
+        if (slot2.hasStack()) {
+            ItemStack itemStack2 = slot2.getStack();
+            itemStack = itemStack2.copy();
+            if (slot < this.left.size()) {
+                if (!this.insertItem(itemStack2, this.left.size() + this.right.size(), this.slots.size(), true))
+                    return ItemStack.EMPTY;
+                slot2.onTakeItem(player, itemStack);
+            } else if (!this.insertItem(itemStack2, 0, this.left.size(), false))
+                return ItemStack.EMPTY;
+            if (itemStack2.isEmpty()) slot2.setStack(ItemStack.EMPTY);
+            else slot2.markDirty();
+        }
+        return itemStack;
     }
 
     @Override
