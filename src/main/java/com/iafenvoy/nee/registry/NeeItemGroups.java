@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public final class NeeItemGroups {
     public static final List<Item> ITEMS = new LinkedList<>();
     public static final ItemGroup MAIN = register("main", FabricItemGroup.builder()

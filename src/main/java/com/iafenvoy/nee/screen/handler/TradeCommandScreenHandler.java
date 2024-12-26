@@ -9,27 +9,24 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 public class TradeCommandScreenHandler extends ScreenHandler {
     private final Inventory left, right;
-    private final ScreenHandlerContext context;
     private final Text anotherPlayerName;
 
     public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, new SimpleInventory(20), new SimpleInventory(20), ScreenHandlerContext.EMPTY, buf.readText());
+        this(syncId, playerInventory, new SimpleInventory(20), new SimpleInventory(20), buf.readText());
     }
 
-    public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, Inventory left, Inventory right, ScreenHandlerContext context, Text anotherPlayerName) {
+    public TradeCommandScreenHandler(int syncId, PlayerInventory playerInventory, Inventory left, Inventory right, Text anotherPlayerName) {
         super(NeeScreenHandlers.TRADE_COMMAND, syncId);
         checkSize(left, 20);
         checkSize(right, 20);
         this.left = left;
         this.right = right;
-        this.context = context;
         this.anotherPlayerName = anotherPlayerName;
 
         for (int j = 0; j < 5; ++j)

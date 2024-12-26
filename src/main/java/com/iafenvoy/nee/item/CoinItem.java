@@ -24,7 +24,6 @@ public class CoinItem extends Item implements ThingWithPrice {
         COINS.add(this);
     }
 
-    @Override
     public int getValue() {
         return this.value;
     }

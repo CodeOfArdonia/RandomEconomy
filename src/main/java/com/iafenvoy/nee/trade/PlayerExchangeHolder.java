@@ -1,7 +1,6 @@
 package com.iafenvoy.nee.trade;
 
 import com.iafenvoy.nee.Constants;
-import com.iafenvoy.nee.screen.context.PlayerContext;
 import com.iafenvoy.nee.screen.handler.TradeCommandScreenHandler;
 import com.iafenvoy.nee.util.InventoryUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -95,7 +94,7 @@ public final class PlayerExchangeHolder {
 
             @Override
             public @NotNull ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-                return new TradeCommandScreenHandler(syncId, playerInventory, current.inventory, another.inventory, PlayerContext.of(current.player), anotherName);
+                return new TradeCommandScreenHandler(syncId, playerInventory, current.inventory, another.inventory, anotherName);
             }
         };
     }

@@ -24,30 +24,28 @@ public class TradeCommand {
     private static final long EXPIRE_TIME = (long) 60 * 1000;
 
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) -> {
-            dispatcher.register(CommandManager.literal("trade")
-                    .requires(ServerCommandSource::isExecutedByPlayer)
-                    .then(CommandManager.argument("target", EntityArgumentType.player())
-                            .executes(ctx -> {
-                                PlayerEntity self = ctx.getSource().getPlayerOrThrow(), target = EntityArgumentType.getPlayer(ctx, "target");
-                                if (self.squaredDistanceTo(target) > 5 * 5) {
-                                    self.sendMessage(Text.translatable("command.not_enough_economy.trade_too_far"));
-                                    return 1;
-                                }
-                                if (REQUESTS.get(target) == self) {
-                                    PlayerExchangeHolder.launchTrade(self, target);
-                                    REQUESTS.remove(self);
-                                    REQUESTS.remove(target);
-                                    return 1;
-                                }
-                                REQUESTS.put(self, target);
-                                REQUEST_TIME.put(self, System.currentTimeMillis());
-                                self.sendMessage(Text.translatable("command.not_enough_economy.trade_request_sent"));
-                                target.sendMessage(Text.translatable("command.not_enough_economy.trade_request", self.getDisplayName()).fillStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/trade " + self.getGameProfile().getName()))));
+        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) -> dispatcher.register(CommandManager.literal("trade")
+                .requires(ServerCommandSource::isExecutedByPlayer)
+                .then(CommandManager.argument("target", EntityArgumentType.player())
+                        .executes(ctx -> {
+                            PlayerEntity self = ctx.getSource().getPlayerOrThrow(), target = EntityArgumentType.getPlayer(ctx, "target");
+                            if (self.squaredDistanceTo(target) > 5 * 5) {
+                                self.sendMessage(Text.translatable("command.not_enough_economy.trade_too_far"));
                                 return 1;
-                            })
-                    ));
-        });
+                            }
+                            if (REQUESTS.get(target) == self) {
+                                PlayerExchangeHolder.launchTrade(self, target);
+                                REQUESTS.remove(self);
+                                REQUESTS.remove(target);
+                                return 1;
+                            }
+                            REQUESTS.put(self, target);
+                            REQUEST_TIME.put(self, System.currentTimeMillis());
+                            self.sendMessage(Text.translatable("command.not_enough_economy.trade_request_sent"));
+                            target.sendMessage(Text.translatable("command.not_enough_economy.trade_request", self.getDisplayName()).fillStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/trade " + self.getGameProfile().getName()))));
+                            return 1;
+                        })
+                )));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             List<PlayerEntity> forRemoval = new LinkedList<>();
             long cur = System.currentTimeMillis();

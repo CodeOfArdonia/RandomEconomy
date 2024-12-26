@@ -3,7 +3,6 @@ package com.iafenvoy.nee.item.block.entity;
 import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
 import com.iafenvoy.nee.registry.NeeBlocks;
-import com.iafenvoy.nee.screen.context.SimpleContext;
 import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
@@ -106,7 +105,7 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
 
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        ScreenHandlerContext ctx = SimpleContext.of(this.world, this.pos);
+        ScreenHandlerContext ctx = ScreenHandlerContext.create(this.world, this.pos);
         if (Objects.equals(this.getOwner(), player.getUuid())) return new TradeStationOwnerScreenHandler(syncId,
                 playerInventory,
                 ImplementedInventory.of(this.left, this::markDirty),

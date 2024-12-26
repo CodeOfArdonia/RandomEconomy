@@ -4,6 +4,10 @@ This mod add an item based economy system.
 
 ## Usage
 
+### Player trade
+
+Use command `/trade <player>` to trade directly to other players.
+
 ### Coins
 
 <img src="https://raw.githubusercontent.com/CodeOfArdonia/NotEnoughEconomy/refs/heads/master/img/1.webp" style="width:256px" alt="">
