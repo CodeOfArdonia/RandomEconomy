@@ -14,7 +14,6 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -45,7 +44,6 @@ public class TradeStationBlockEntityRenderer implements BlockEntityRenderer<Trad
         matrices.push();
         assert entity.getWorld() != null;
         matrices.translate(0, 0.75, 0);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((entity.getWorld().getTime() + tickDelta) * 4));
         matrices.scale(1.5f, 1.5f, 1.5f);
         this.itemRenderer.renderItem(entity.getDisplayStack(), ModelTransformationMode.GROUND, 15728848, overlay, matrices, vertexConsumers, entity.getWorld(), 0);
         matrices.pop();

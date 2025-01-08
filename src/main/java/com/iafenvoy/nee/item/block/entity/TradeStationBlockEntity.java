@@ -1,12 +1,10 @@
 package com.iafenvoy.nee.item.block.entity;
 
-import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
 import com.iafenvoy.nee.registry.NeeBlocks;
 import com.iafenvoy.nee.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.TradeStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
-import com.iafenvoy.nee.util.SyncBlockEntity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,6 +16,9 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -30,7 +31,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class TradeStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SyncBlockEntity {
+public class TradeStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "owner_name";
     @Nullable
@@ -49,7 +50,10 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        this.readFromNbt(nbt);
+        if (nbt.contains(OWNER_KEY, NbtElement.INT_ARRAY_TYPE)) this.owner = nbt.getUuid(OWNER_KEY);
+        if (nbt.contains(OWNER_NAME_KEY, NbtElement.STRING_TYPE)) this.ownerNameCache = nbt.getString(OWNER_NAME_KEY);
+        this.display.clear();
+        Inventories.readNbt(nbt.getCompound("display"), this.display);
         Inventories.readNbt(nbt.getCompound("left"), this.left);
         Inventories.readNbt(nbt.getCompound("right"), this.right);
         Inventories.readNbt(nbt.getCompound("inventory"), this.inventory);
@@ -58,23 +62,12 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        this.writeToNbt(nbt);
-        nbt.put("left", Inventories.writeNbt(new NbtCompound(), this.left));
-        nbt.put("right", Inventories.writeNbt(new NbtCompound(), this.right));
-        nbt.put("inventory", Inventories.writeNbt(new NbtCompound(), this.inventory));
-    }
-
-    public void writeToNbt(NbtCompound nbt) {
         if (this.owner != null) nbt.putUuid(OWNER_KEY, this.owner);
         if (this.ownerNameCache != null) nbt.putString(OWNER_NAME_KEY, this.ownerNameCache);
         nbt.put("display", Inventories.writeNbt(new NbtCompound(), this.display));
-    }
-
-    public void readFromNbt(NbtCompound nbt) {
-        if (nbt.contains(OWNER_KEY, NbtElement.INT_ARRAY_TYPE)) this.owner = nbt.getUuid(OWNER_KEY);
-        if (nbt.contains(OWNER_NAME_KEY, NbtElement.STRING_TYPE)) this.ownerNameCache = nbt.getString(OWNER_NAME_KEY);
-        this.display.clear();
-        Inventories.readNbt(nbt.getCompound("display"), this.display);
+        nbt.put("left", Inventories.writeNbt(new NbtCompound(), this.left));
+        nbt.put("right", Inventories.writeNbt(new NbtCompound(), this.right));
+        nbt.put("inventory", Inventories.writeNbt(new NbtCompound(), this.inventory));
     }
 
     public @Nullable UUID getOwner() {
@@ -85,7 +78,8 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
         this.owner = owner;
         this.ownerNameCache = Optional.ofNullable(this.getWorld()).map(x -> x.getPlayerByUuid(owner)).map(PlayerEntity::getGameProfile).map(GameProfile::getName).orElse(null);
         this.markDirty();
-        TradeStationComponent.COMPONENT.sync(this);
+        if (this.world != null)
+            this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 0);
     }
 
     public Text getFloatingName() {
@@ -113,7 +107,8 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
                 ImplementedInventory.of(this.inventory, this::markDirty),
                 ImplementedInventory.of(this.display, () -> {
                     this.markDirty();
-                    TradeStationComponent.COMPONENT.sync(this);
+                    if (this.world != null)
+                        this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 0);
                 }),
                 ctx);
         else return new TradeStationCustomerScreenHandler(syncId, playerInventory,
@@ -151,5 +146,16 @@ public class TradeStationBlockEntity extends BlockEntity implements NamedScreenH
         ItemEntity itemEntity = new ItemEntity(this.world, (double) this.pos.getX() + 0.5, (double) this.pos.getY() + 0.5, (double) this.pos.getZ() + 0.5, stack);
         itemEntity.setToDefaultPickupDelay();
         this.world.spawnEntity(itemEntity);
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return this.createNbt();
     }
 }

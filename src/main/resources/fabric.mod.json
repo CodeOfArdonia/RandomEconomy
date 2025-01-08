@@ -20,14 +20,6 @@
     ],
     "client": [
       "com.iafenvoy.nee.NotEnoughEconomyClient"
-    ],
-    "cardinal-components": [
-      "com.iafenvoy.nee.component.ModComponentEntry"
-    ]
-  },
-  "custom": {
-    "cardinal-components": [
-      "not_enough_economy:trade_station"
     ]
   },
   "depends": {

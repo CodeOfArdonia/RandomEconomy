@@ -1,11 +1,9 @@
 package com.iafenvoy.nee.item.block.entity;
 
-import com.iafenvoy.nee.component.TradeStationComponent;
 import com.iafenvoy.nee.registry.NeeBlockEntities;
 import com.iafenvoy.nee.screen.handler.SystemStationCustomerScreenHandler;
 import com.iafenvoy.nee.screen.handler.SystemStationOwnerScreenHandler;
 import com.iafenvoy.nee.screen.inventory.ImplementedInventory;
-import com.iafenvoy.nee.util.SyncBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +12,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class SystemStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SyncBlockEntity {
+public class SystemStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private static final String OWNER_KEY = "owner";
     private static final String OWNER_NAME_KEY = "owner_name";
     @Nullable
@@ -42,7 +43,10 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        this.readFromNbt(nbt);
+        if (nbt.contains(OWNER_KEY, NbtElement.INT_ARRAY_TYPE)) this.owner = nbt.getUuid(OWNER_KEY);
+        if (nbt.contains(OWNER_NAME_KEY, NbtElement.STRING_TYPE)) this.ownerNameCache = nbt.getString(OWNER_NAME_KEY);
+        this.display.clear();
+        Inventories.readNbt(nbt.getCompound("display"), this.display);
         Inventories.readNbt(nbt.getCompound("left"), this.left);
         Inventories.readNbt(nbt.getCompound("right"), this.right);
     }
@@ -50,22 +54,11 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        this.writeToNbt(nbt);
-        nbt.put("left", Inventories.writeNbt(new NbtCompound(), this.left));
-        nbt.put("right", Inventories.writeNbt(new NbtCompound(), this.right));
-    }
-
-    public void writeToNbt(NbtCompound nbt) {
         if (this.owner != null) nbt.putUuid(OWNER_KEY, this.owner);
         if (this.ownerNameCache != null) nbt.putString(OWNER_NAME_KEY, this.ownerNameCache);
         nbt.put("display", Inventories.writeNbt(new NbtCompound(), this.display));
-    }
-
-    public void readFromNbt(NbtCompound nbt) {
-        if (nbt.contains(OWNER_KEY, NbtElement.INT_ARRAY_TYPE)) this.owner = nbt.getUuid(OWNER_KEY);
-        if (nbt.contains(OWNER_NAME_KEY, NbtElement.STRING_TYPE)) this.ownerNameCache = nbt.getString(OWNER_NAME_KEY);
-        this.display.clear();
-        Inventories.readNbt(nbt.getCompound("display"), this.display);
+        nbt.put("left", Inventories.writeNbt(new NbtCompound(), this.left));
+        nbt.put("right", Inventories.writeNbt(new NbtCompound(), this.right));
     }
 
     @Override
@@ -82,11 +75,13 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
                     ImplementedInventory.of(this.left, this::markDirty),
                     ImplementedInventory.of(this.right, () -> {
                         this.markDirty();
-                        TradeStationComponent.COMPONENT.sync(this);
+                        if (this.world != null)
+                            this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 0);
                     }),
                     ImplementedInventory.of(this.display, () -> {
                         this.markDirty();
-                        TradeStationComponent.COMPONENT.sync(this);
+                        if (this.world != null)
+                            this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 0);
                     }),
                     ctx);
         else return new SystemStationCustomerScreenHandler(syncId, playerInventory,
@@ -97,5 +92,16 @@ public class SystemStationBlockEntity extends BlockEntity implements NamedScreen
 
     public ItemStack getDisplayStack() {
         return this.right.get(0);
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return this.createNbt();
     }
 }
