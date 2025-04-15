@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/CodeOfArdonia/NotEnoughEconomy/issues"
+license = "All Right Reserved"
+
+[[mods]]
+modId = "not_enough_economy"
+version = "${version}"
+displayName = "Not Enough Economy"
+authors = "IAFEnvoy, HF_ColdWind"
+description = '''
+An item based economy system.
+'''
+logoFile = "logo.jpg"
+
+[[dependencies.not_enough_economy]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.not_enough_economy]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.not_enough_economy]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"
