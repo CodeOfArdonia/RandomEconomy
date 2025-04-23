@@ -1,0 +1,18 @@
+{
+  "checked": {
+    "sounds": [
+      {
+        "name": "random_economy:checked",
+        "stream": false
+      }
+    ]
+  },
+  "coins": {
+    "sounds": [
+      {
+        "name": "random_economy:coins",
+        "stream": false
+      }
+    ]
+  }
+}

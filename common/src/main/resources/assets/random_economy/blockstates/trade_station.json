@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "random_economy:block/trade_station"
+    }
+  }
+}

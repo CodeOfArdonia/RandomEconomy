@@ -4,7 +4,7 @@ plugins {
 
 loom {
     forge {
-        mixinConfig "not_enough_economy.mixins.json"
+        mixinConfig "random_economy.mixins.json"
     }
 }
 

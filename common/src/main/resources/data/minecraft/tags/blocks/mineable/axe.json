@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "not_enough_economy:exchange_station"
+    "random_economy:exchange_station"
   ]
 }

@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'not_enough_economy'
+rootProject.name = 'random_economy'
 
 include 'common'
 include 'fabric'
