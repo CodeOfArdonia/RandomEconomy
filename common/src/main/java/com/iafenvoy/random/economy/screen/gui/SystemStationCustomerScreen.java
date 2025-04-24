@@ -3,7 +3,7 @@ package com.iafenvoy.random.economy.screen.gui;
 import com.iafenvoy.random.economy.Constants;
 import com.iafenvoy.random.economy.RandomEconomy;
 import com.iafenvoy.random.economy.screen.handler.SystemStationCustomerScreenHandler;
-import com.iafenvoy.random.economy.util.PacketBufferUtils;
+import com.iafenvoy.random.library.network.PacketBufferUtils;
 import dev.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

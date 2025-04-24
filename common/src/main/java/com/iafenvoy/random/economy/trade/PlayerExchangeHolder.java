@@ -2,8 +2,8 @@ package com.iafenvoy.random.economy.trade;
 
 import com.iafenvoy.random.economy.Constants;
 import com.iafenvoy.random.economy.screen.handler.TradeCommandScreenHandler;
-import com.iafenvoy.random.economy.util.InventoryUtil;
-import com.iafenvoy.random.economy.util.PacketBufferUtils;
+import com.iafenvoy.random.library.inventory.InventoryUtil;
+import com.iafenvoy.random.library.network.PacketBufferUtils;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.menu.ExtendedMenuProvider;

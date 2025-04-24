@@ -6,9 +6,9 @@ import com.iafenvoy.random.economy.item.CoinItem;
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeItems;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
-import com.iafenvoy.random.economy.screen.slot.ChequeOnlySlot;
-import com.iafenvoy.random.economy.screen.slot.MoneyOnlySlot;
-import com.iafenvoy.random.economy.screen.slot.TakeOnlySlot;
+import com.iafenvoy.random.economy.util.ThingWithPrice;
+import com.iafenvoy.random.library.inventory.slot.InputPredicateSlot;
+import com.iafenvoy.random.library.inventory.slot.TakeOnlySlotWithCallback;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,9 +37,9 @@ public class ChequeTableScreenHandler extends ScreenHandler {
         this.context = context;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 5; ++j)
-                this.addSlot(new MoneyOnlySlot(this.coins, j + i * 5, 8 + j * 18, 18 + i * 18));
-        this.addSlot(new ChequeOnlySlot(this.chequesInput, 0, 134, 18));
-        this.addSlot(new TakeOnlySlot(this, this.chequesOutput, 0, 134, 54, amount -> {
+                this.addSlot(new InputPredicateSlot(this.coins, j + i * 5, 8 + j * 18, 18 + i * 18, stack -> stack.getItem() instanceof ThingWithPrice));
+        this.addSlot(new InputPredicateSlot(this.chequesInput, 0, 134, 18, stack -> stack.isOf(NeeItems.CHEQUE.get())));
+        this.addSlot(new TakeOnlySlotWithCallback(this, this.chequesOutput, 0, 134, 54, amount -> {
         }));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)

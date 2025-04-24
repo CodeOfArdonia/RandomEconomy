@@ -2,7 +2,7 @@ package com.iafenvoy.random.economy.screen.handler;
 
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
-import com.iafenvoy.random.economy.screen.slot.FakeItemSlot;
+import com.iafenvoy.random.library.inventory.slot.FakeItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -27,10 +27,10 @@ public class SystemStationOwnerScreenHandler extends ScreenHandler {
         this.context = context;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(left, j + i * 4, 8 + j * 18, 18 + i * 18));
+                this.addSlot(new FakeItemSlot(this, left, j + i * 4, 8 + j * 18, 18 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(right, j + i * 4, 98 + j * 18, 18 + i * 18));
+                this.addSlot(new FakeItemSlot(this, right, j + i * 4, 98 + j * 18, 18 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));

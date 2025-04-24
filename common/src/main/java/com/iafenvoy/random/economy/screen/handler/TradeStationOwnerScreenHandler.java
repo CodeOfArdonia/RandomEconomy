@@ -2,7 +2,7 @@ package com.iafenvoy.random.economy.screen.handler;
 
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
-import com.iafenvoy.random.economy.screen.slot.FakeItemSlot;
+import com.iafenvoy.random.library.inventory.slot.FakeItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -33,11 +33,11 @@ public class TradeStationOwnerScreenHandler extends ScreenHandler {
 
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(this.left, j + i * 4, 8 + j * 18, 16 + i * 18));
+                this.addSlot(new FakeItemSlot(this, this.left, j + i * 4, 8 + j * 18, 16 + i * 18));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 4; ++j)
-                this.addSlot(new FakeItemSlot(this.right, j + i * 4, 98 + j * 18, 16 + i * 18));
-        this.addSlot(new FakeItemSlot(display, 0, 152, 72));
+                this.addSlot(new FakeItemSlot(this, this.right, j + i * 4, 98 + j * 18, 16 + i * 18));
+        this.addSlot(new FakeItemSlot(this, display, 0, 152, 72));
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 7; ++j)
                 this.addSlot(new Slot(this.inventory, j + i * 7, 8 + j * 18, 72 + i * 18));

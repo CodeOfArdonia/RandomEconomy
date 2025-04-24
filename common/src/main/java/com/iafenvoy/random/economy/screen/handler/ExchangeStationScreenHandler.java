@@ -2,10 +2,11 @@ package com.iafenvoy.random.economy.screen.handler;
 
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
-import com.iafenvoy.random.economy.screen.inventory.InventoryWithCallback;
-import com.iafenvoy.random.economy.screen.slot.MoneyOnlySlot;
-import com.iafenvoy.random.economy.screen.slot.TakeOnlySlot;
 import com.iafenvoy.random.economy.trade.CoinExchangeHolder;
+import com.iafenvoy.random.economy.util.ThingWithPrice;
+import com.iafenvoy.random.library.inventory.ImplementedInventory;
+import com.iafenvoy.random.library.inventory.slot.InputPredicateSlot;
+import com.iafenvoy.random.library.inventory.slot.TakeOnlySlotWithCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.collection.DefaultedList;
 import org.jetbrains.annotations.Nullable;
 
 public class ExchangeStationScreenHandler extends ScreenHandler {
@@ -28,17 +30,17 @@ public class ExchangeStationScreenHandler extends ScreenHandler {
 
     public ExchangeStationScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(NeeScreenHandlers.EXCHANGE_STATION.get(), syncId);
-        this.inputs = new InventoryWithCallback(1, this);
+        this.inputs = ImplementedInventory.of(DefaultedList.ofSize(1, ItemStack.EMPTY), () -> this.onContentChanged(null));
         this.outputs = new SimpleInventory(2);
         this.context = context;
-        this.addSlot(new MoneyOnlySlot(this.inputs, 0, 80, 20));
-        this.addSlot(new TakeOnlySlot(this, this.outputs, 0, 22, 20, amount -> {
+        this.addSlot(new InputPredicateSlot(this.inputs, 0, 80, 20, stack -> stack.getItem() instanceof ThingWithPrice));
+        this.addSlot(new TakeOnlySlotWithCallback(this, this.outputs, 0, 22, 20, amount -> {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.leftRatio();
             this.inputs.getStack(0).decrement(amount / ratio);
             ScreenHandlerUtils.playCoinsSound(this.context);
         }));
-        this.addSlot(new TakeOnlySlot(this, this.outputs, 1, 138, 20, amount -> {
+        this.addSlot(new TakeOnlySlotWithCallback(this, this.outputs, 1, 138, 20, amount -> {
             if (this.currentHolder == null) return;
             int ratio = this.currentHolder.rightRatio();
             this.inputs.getStack(0).decrement(amount * ratio);

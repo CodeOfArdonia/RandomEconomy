@@ -7,7 +7,7 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public final class RandomEconomyClient {
-    public static void process(){
+    public static void process() {
         NeeScreenHandlers.registerScreen();
         NeeRenderers.registerBlockEntityRenderers();
     }

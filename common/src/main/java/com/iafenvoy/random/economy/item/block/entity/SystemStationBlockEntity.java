@@ -3,7 +3,7 @@ package com.iafenvoy.random.economy.item.block.entity;
 import com.iafenvoy.random.economy.registry.NeeBlockEntities;
 import com.iafenvoy.random.economy.screen.handler.SystemStationCustomerScreenHandler;
 import com.iafenvoy.random.economy.screen.handler.SystemStationOwnerScreenHandler;
-import com.iafenvoy.random.economy.screen.inventory.ImplementedInventory;
+import com.iafenvoy.random.library.inventory.ImplementedInventory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
