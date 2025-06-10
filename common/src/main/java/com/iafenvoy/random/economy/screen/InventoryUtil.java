@@ -29,17 +29,14 @@ public class InventoryUtil {
                 int neededCount = entry.getValue();
                 if (stack.areEqual(targetStack)) {
                     int count = targetStack.getCount();
-                    if (count >= neededCount)
-                        itemsMap.put(stack, 0);
-                    else
-                        itemsMap.put(stack, neededCount - count);
+                    if (count >= neededCount) itemsMap.put(stack, 0);
+                    else itemsMap.put(stack, neededCount - count);
                     break;
                 }
             }
         }
         for (int count : itemsMap.values())
-            if (count > 0)
-                return false;
+            if (count > 0) return false;
         return true;
     }
 
@@ -70,8 +67,7 @@ public class InventoryUtil {
             }
         }
         for (int count : itemsMap.values())
-            if (count > 0)
-                return false;
+            if (count > 0) return false;
         return true;
     }
 
@@ -99,8 +95,7 @@ public class InventoryUtil {
                     if (inventoryStack == null) inventory.setStack(i, stack.copy());
                     else inventoryStack.increment(countToAdd);
                     stack.decrement(countToAdd);
-                    if (stack.getCount() == 0)
-                        return true;
+                    if (stack.getCount() == 0) return true;
                 }
             }
         }

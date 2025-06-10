@@ -26,11 +26,11 @@ import java.util.Map;
 
 public final class PlayerExchangeHolder {
     private static final List<PlayerExchangeHolder> PENDING = new LinkedList<>();
-    private static final Map<PlayerEntity, PlayerExchangeHolder> HOLDER_BY_PLAYER = new HashMap<>();
-    private static final Map<PlayerEntity, Single> SINGLE_BY_PLAYER = new HashMap<>();
+    private static final Map<ServerPlayerEntity, PlayerExchangeHolder> HOLDER_BY_PLAYER = new HashMap<>();
+    private static final Map<ServerPlayerEntity, Single> SINGLE_BY_PLAYER = new HashMap<>();
     private final Single user1, user2;
 
-    private PlayerExchangeHolder(PlayerEntity user1, PlayerEntity user2) {
+    private PlayerExchangeHolder(ServerPlayerEntity user1, ServerPlayerEntity user2) {
         this.user1 = new Single(user1, new SimpleInventory(20));
         this.user2 = new Single(user2, new SimpleInventory(20));
         PENDING.add(this);
@@ -107,27 +107,26 @@ public final class PlayerExchangeHolder {
         return single == this.user1 || single == this.user2;
     }
 
-    public static void closeTradeScreen(PlayerEntity player) {
+    public static void closeTradeScreen(ServerPlayerEntity player) {
         assert Constants.TRADE_STATE_CHANGE != null;
-        if (player instanceof ServerPlayerEntity serverPlayer)
-            NetworkManager.sendToPlayer(serverPlayer, Constants.TRADE_STATE_CHANGE, PacketBufferUtils.create().writeEnumConstant(TradeMessageType.ANOTHER_CLOSE_SCREEN));
+        NetworkManager.sendToPlayer(player, Constants.TRADE_STATE_CHANGE, PacketBufferUtils.create().writeEnumConstant(TradeMessageType.ANOTHER_CLOSE_SCREEN));
     }
 
-    public static void sendAcceptState(PlayerEntity player, boolean accepted) {
+    public static void sendAcceptState(ServerPlayerEntity player, boolean accepted) {
         assert Constants.TRADE_STATE_CHANGE != null;
-        if (player instanceof ServerPlayerEntity serverPlayer)
-            NetworkManager.sendToPlayer(serverPlayer, Constants.TRADE_STATE_CHANGE, PacketBufferUtils.create().writeEnumConstant(accepted ? TradeMessageType.ANOTHER_ACCEPT : TradeMessageType.ANOTHER_CANCEL_ACCEPT));
+        NetworkManager.sendToPlayer(player, Constants.TRADE_STATE_CHANGE, PacketBufferUtils.create().writeEnumConstant(accepted ? TradeMessageType.ANOTHER_ACCEPT : TradeMessageType.ANOTHER_CANCEL_ACCEPT));
     }
 
-    public static void launchTrade(PlayerEntity user1, PlayerEntity user2) {
+    public static void launchTrade(ServerPlayerEntity user1, ServerPlayerEntity user2) {
         new PlayerExchangeHolder(user1, user2).openScreen();
     }
 
     static {
         assert Constants.TRADE_STATE_CHANGE != null;
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, Constants.TRADE_STATE_CHANGE, (buf, ctx) -> {
-            PlayerExchangeHolder holder = HOLDER_BY_PLAYER.get(ctx.getPlayer());
-            Single single = SINGLE_BY_PLAYER.get(ctx.getPlayer());
+            if (!(ctx.getPlayer() instanceof ServerPlayerEntity player)) return;
+            PlayerExchangeHolder holder = HOLDER_BY_PLAYER.get(player);
+            Single single = SINGLE_BY_PLAYER.get(player);
             if (holder == null || !holder.isIn(single)) return;
             Single another = holder.getAnother(single);
             TradeMessageType type = buf.readEnumConstant(TradeMessageType.class);
@@ -150,11 +149,11 @@ public final class PlayerExchangeHolder {
     }
 
     private static class Single {
-        private final PlayerEntity player;
+        private final ServerPlayerEntity player;
         private final Inventory inventory;
         private boolean accepted;
 
-        private Single(PlayerEntity player, Inventory inventory) {
+        private Single(ServerPlayerEntity player, Inventory inventory) {
             this.player = player;
             this.inventory = inventory;
         }

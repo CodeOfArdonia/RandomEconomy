@@ -1,4 +1,4 @@
-package com.iafenvoy.random.economy.command;
+package com.iafenvoy.random.economy;
 
 import com.iafenvoy.random.economy.trade.PlayerExchangeHolder;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
@@ -9,6 +9,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -28,7 +29,7 @@ public class TradeCommand {
                 .requires(ServerCommandSource::isExecutedByPlayer)
                 .then(CommandManager.argument("target", EntityArgumentType.player())
                         .executes(ctx -> {
-                            PlayerEntity self = ctx.getSource().getPlayerOrThrow(), target = EntityArgumentType.getPlayer(ctx, "target");
+                            ServerPlayerEntity self = ctx.getSource().getPlayerOrThrow(), target = EntityArgumentType.getPlayer(ctx, "target");
                             if (self.squaredDistanceTo(target) > 5 * 5) {
                                 self.sendMessage(Text.translatable("command.random_economy.trade_too_far"));
                                 return 1;

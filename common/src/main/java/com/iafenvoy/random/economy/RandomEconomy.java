@@ -1,6 +1,5 @@
 package com.iafenvoy.random.economy;
 
-import com.iafenvoy.random.economy.command.TradeCommand;
 import com.iafenvoy.random.economy.registry.*;
 
 public final class RandomEconomy {
