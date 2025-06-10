@@ -1,4 +1,4 @@
-package com.iafenvoy.random.economy.screen.handler;
+package com.iafenvoy.random.economy.screen;
 
 import com.iafenvoy.random.economy.registry.NeeSounds;
 import net.minecraft.screen.ScreenHandlerContext;

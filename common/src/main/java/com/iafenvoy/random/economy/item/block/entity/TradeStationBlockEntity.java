@@ -4,7 +4,7 @@ import com.iafenvoy.random.economy.registry.NeeBlockEntities;
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.screen.handler.TradeStationCustomerScreenHandler;
 import com.iafenvoy.random.economy.screen.handler.TradeStationOwnerScreenHandler;
-import com.iafenvoy.random.library.inventory.ImplementedInventory;
+import com.iafenvoy.random.economy.screen.inventory.ImplementedInventory;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

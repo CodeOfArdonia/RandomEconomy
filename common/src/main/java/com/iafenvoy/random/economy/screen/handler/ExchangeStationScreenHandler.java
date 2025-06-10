@@ -2,11 +2,12 @@ package com.iafenvoy.random.economy.screen.handler;
 
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
+import com.iafenvoy.random.economy.screen.ScreenHandlerUtils;
+import com.iafenvoy.random.economy.screen.inventory.ImplementedInventory;
+import com.iafenvoy.random.economy.screen.slot.InputPredicateSlot;
+import com.iafenvoy.random.economy.screen.slot.TakeOnlySlotWithCallback;
 import com.iafenvoy.random.economy.trade.CoinExchangeHolder;
 import com.iafenvoy.random.economy.util.ThingWithPrice;
-import com.iafenvoy.random.library.inventory.ImplementedInventory;
-import com.iafenvoy.random.library.inventory.slot.InputPredicateSlot;
-import com.iafenvoy.random.library.inventory.slot.TakeOnlySlotWithCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;

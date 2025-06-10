@@ -2,7 +2,7 @@ package com.iafenvoy.random.economy.screen.handler;
 
 import com.iafenvoy.random.economy.registry.NeeBlocks;
 import com.iafenvoy.random.economy.registry.NeeScreenHandlers;
-import com.iafenvoy.random.library.inventory.slot.FakeItemSlot;
+import com.iafenvoy.random.economy.screen.slot.FakeItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
